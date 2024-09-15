@@ -4,15 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
 
 
 
-  app.enableCors({
-    origin: 'http://localhost:5173', // Replace with your frontend's origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true, // If you need to send cookies with the request
-  });
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe())
   const config = new DocumentBuilder()
   .setTitle('Todo REST API')
@@ -21,7 +17,6 @@ async function bootstrap() {
   .addBearerAuth()
   .build();
 const document = SwaggerModule.createDocument(app, config);
-SwaggerModule.setup('api',app,document);
 SwaggerModule.setup('/swagger', app, document, {
     customCssUrl:
       'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
